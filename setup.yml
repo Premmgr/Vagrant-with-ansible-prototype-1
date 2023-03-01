@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+
+  roles:
+    - common
+    - user
+    - files
+    - docker
+    - firewall
+    #- lvm
+    #- directories
+    #- application
+    #- repo-setup

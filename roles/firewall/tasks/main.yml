@@ -1,0 +1,26 @@
+- name: Turn logging level to low
+  ufw:
+    logging: 'low'
+
+- name: Allow ssh over port 22
+  ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+
+- name: Allow all access to port 5000
+  ufw: 
+    rule: allow
+    port: '5000'
+
+- name: Rate limit exessive abuse on port 5000
+  ufw: 
+    rule: limit
+    port: '5000'
+    proto: tcp
+
+- name: Drop all other traffic
+  ufw: 
+    state: enabled
+    policy: deny
+    direction: incoming

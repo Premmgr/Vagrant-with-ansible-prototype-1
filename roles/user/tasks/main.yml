@@ -1,0 +1,12 @@
+# this play will add users
+
+- name: add admin accounts
+  ansible.builtin.user:
+    name: user1
+    # generated password >>>>  openssl passwd -6 ( current hashed passwd: password )
+    password: $6$3O3IFoo9nM9TyJ4I$cUC9q9ABWGuzrWapYq42xwdn7z1QjmbkT1hI3rUyTdxDtwqk.qO.LsQLmov43FBVmZcloANECeQINiWm/pudh0
+    shell: "/bin/bash"
+    system: false
+    createhome: true
+    home: "/home/user1"
+    group: sudo

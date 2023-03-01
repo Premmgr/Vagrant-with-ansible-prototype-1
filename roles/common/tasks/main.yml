@@ -1,0 +1,6 @@
+- name: Install packages
+  apt:
+    # installs common tools
+    name: ['net-tools', 'dstat', 'python3-pip', 'byobu','gzip','wget']
+    state: present
+    update_cache: yes

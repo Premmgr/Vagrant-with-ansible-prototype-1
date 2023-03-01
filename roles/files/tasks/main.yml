@@ -1,0 +1,10 @@
+- name: Add important file
+  file:
+    # test file
+    path: /important.txt
+    state: touch
+- name: Add value in important file
+  lineinfile:
+    path: /important.txt
+    line: 'This is an important file to be added in the linux system.'
+    state: present

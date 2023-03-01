@@ -1,0 +1,79 @@
+# installs LVM package on host
+- name: Install LVM package
+  apt:
+    name: lvm2
+    update_cache: yes
+
+# creates LVM physical volume
+- name: Create LVM physical volume
+  lvm_physical_volume:
+    pvcreate: /dev/sda
+  tags:
+    - lvm
+- name: Create LVM volume group
+  lvm_volume_group:
+    vgcreate: vg0 /dev/sda
+  tags:
+    - lvm
+
+# create the LVM logical volume:
+- name: Create LVM logical volume for /
+  lvm_logical_volume:
+    lvcreate: vg0 -n root -L 30G
+  tags:
+    - lvm
+
+- name: Create LVM logical volume for /opt
+  lvm_logical_volume:
+    lvcreate: vg0 -n opt -L 15G
+  tags:
+    - lvm
+
+- name: Create LVM logical volume for unmouted
+  lvm_logical_volume:
+    lvcreate: vg0 -n unmouted -L 15G
+  tags:
+    - lvm
+
+# format the logical volume and create filesystems
+
+- name: Foramt LVM logical volumes
+  filesystem:
+    fstype: ext4
+    dev: /dev/vg0/root
+  tags:
+    - lvm
+
+- name: Create filesystem on /opt LVM logical volume
+  filesystem:
+    fstype: ext4
+    dev: /dev/vg0/opt
+  tags:
+    - lvm
+
+- name: Create filesystem on unmouted LVM logical volume
+  filesystem:
+    fstype: ext4
+    dev: /dev/vg0/unmouted
+  tags:
+    - lvm
+
+# Mountes the logical volume to the desired mount points.
+
+- name: Mount / LVM logical volume
+  mount:
+    path: /
+    src: /dev/vg0/root
+    fstype: ext4
+    state: mounted
+  tags:
+    - lvm
+
+- name: Mount /opt LVM logical volume
+  mount:
+    path: /opt
+    src: /dev/vg0/opt
+    fstype: ext4
+    state: mounted
+  tags:
+    - lvm
